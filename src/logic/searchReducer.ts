@@ -1,85 +1,78 @@
 import { useReducer } from "react";
+import {
+  ReducerMap,
+  SearchAppState,
+  ActionTypes,
+  AbnLookupResult,
+  Action,
+  CompanySearchResult
+} from "./types";
 
-/** Action Types for our app's reducer */
-export enum ActionTypes {
-  SearchBegin = "SearchBegin",
-  SearchSuccess = "SearchSuccess",
-  SearchFailed = "SearchFailed",
-  SearchResultSelected = "SearchResultSelected"
-}
-
-/** Simple type for a redux shaped action */
-export type Action<T extends ActionTypes> = {
-  type: T;
-  payload: unknown;
-};
-
-/** Type to map abr.business.gov.au's results to */
-export type CompanySearchResult = {
-  Abn: string;
-  AbnStatus: string;
-  Acn: string;
-  AddressDate: string;
-  AddressPostcode: string;
-  AddressState: string;
-  BusinessName: string[];
-  EntityName: string;
-  EntityTypeCode: string;
-  EntityTypeName: string;
-  Gst: string;
-  Message: string;
-};
-
-/** type state for our app */
-export type SearchAppState = {
-  searchText: string | null;
-  isFetching: boolean;
-  error: string | null;
-  searchResults: CompanySearchResult[];
-  selectedResultId: string;
-};
-
-/** type to declare the reducer as a lookup by ActionType */
-export type ReducerMap = {
-  [key in ActionTypes]: (
-    state: SearchAppState,
-    action: Action<ActionTypes>
-  ) => SearchAppState;
-};
+export const initialState = (): SearchAppState => ({
+  errorAbn: null,
+  errorCompany: null,
+  isFetchingAbn: false,
+  isFetchingCompanies: false,
+  companySearchResults: null,
+  companyDetail: null,
+  abnSearchText: "",
+  companySearchText: "",
+  selectedCompanyAbn: null
+});
 
 /** The reducer map - this is equivalent to the classic
  * "switch" statement version in redux but safer
  */
 export const reducerMap: ReducerMap = {
-  [ActionTypes.SearchBegin]: (state: SearchAppState, action) => {
+  [ActionTypes.AbnLookupBegin]: (state: SearchAppState, action) => {
     return {
       ...state,
-      error: null,
-      searchResults: [],
-      isFetching: true,
-      searchText: action.payload as string
+      errorAbn: null,
+      companyDetail: null,
+      isFetchingAbn: true,
+      abnSearchText: action.payload as string
     };
   },
-  [ActionTypes.SearchSuccess]: (state: SearchAppState, action) => {
+  [ActionTypes.AbnLookupSuccess]: (state: SearchAppState, action) => {
     return {
       ...state,
-      error: null,
-      searchResults: action.payload as CompanySearchResult[], // assume this shape for the time being
-      isFetching: false
+      errorAbn: null,
+      companyDetail: action.payload as AbnLookupResult, // assume this shape for the time being
+      isFetchingAbn: false
     };
   },
-  [ActionTypes.SearchFailed]: (state: SearchAppState, action) => {
+  [ActionTypes.AbnLookupFailed]: (state: SearchAppState, action) => {
     return {
       ...state,
-      error: action.payload as string,
-      searchResults: [],
-      isFetching: false
+      errorAbn: action.payload as string,
+      companyDetail: null,
+      isFetchingAbn: false
     };
   },
-  [ActionTypes.SearchResultSelected]: (state: SearchAppState, action) => {
+
+  [ActionTypes.CompanySearchBegin]: (state: SearchAppState, action) => {
     return {
       ...state,
-      selectedResultId: action.payload as string
+      errorCompany: null,
+      isFetchingCompanies: true,
+      companySearchText: action.payload as string,
+      companySearchResults: null
+    };
+  },
+  [ActionTypes.CompanySearchSuccess]: (state: SearchAppState, action) => {
+    return {
+      ...state,
+      errorCompany: null,
+      isFetchingCompanies: false,
+      companySearchResults: action.payload as CompanySearchResult[]
+    };
+  },
+  [ActionTypes.CompanySearchFailed]: (state: SearchAppState, action) => {
+    return {
+      ...state,
+      errorCompany: action.payload as string,
+      companySearchResults: null,
+      isFetchingCompanies: false
     };
   }
 };
@@ -95,10 +88,11 @@ export const searchAppReducer = (
   const reducer = reducerMap[action.type];
 
   if (reducer !== undefined) {
+    // console.log(action.type, action.payload, state);
     return reducer(state, action);
   }
 
-  throw Error(`${action.type} not defined in cartItemReducer`);
+  throw Error(`${action.type} not defined in reducer`);
 };
 
 /**
