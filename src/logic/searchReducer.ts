@@ -88,7 +88,7 @@ export const searchAppReducer = (
   const reducer = reducerMap[action.type];
 
   if (reducer !== undefined) {
-    // console.log(action.type, action.payload, state);
+    console.log(action.type, action.payload, state);
     return reducer(state, action);
   }
 

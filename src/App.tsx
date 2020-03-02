@@ -12,24 +12,18 @@ function App() {
   const [state, dispatch] = useSearchAppReducer(initialState());
 
   // dispatch Company search ...
-  const handleCompanySearchChanged = useCallback(
-    (query: string) => {
-      if (query && query !== state.companySearchText) {
-        dispatch({ type: ActionTypes.CompanySearchBegin, payload: query });
-      }
-    },
-    [dispatch, state.companySearchText]
-  );
+  const handleCompanySearchChanged = useCallback((query: string) => {
+    if (query && query !== state.companySearchText) {
+      dispatch({ type: ActionTypes.CompanySearchBegin, payload: query });
+    }
+  }, []);
 
   // dispatch ABN lookup search ...
-  const handleAbnSearchChanged = useCallback(
-    (query: string) => {
-      if (query && query !== state.abnSearchText) {
-        dispatch({ type: ActionTypes.AbnLookupBegin, payload: query });
-      }
-    },
-    [dispatch, state.abnSearchText]
-  );
+  const handleAbnSearchChanged = useCallback((query: string) => {
+    if (query && query !== state.abnSearchText) {
+      dispatch({ type: ActionTypes.AbnLookupBegin, payload: query });
+    }
+  }, []);
 
   // custom effects trigger off changes to state to issue side effects,
   // in turn dispatching completion/error actions ...
