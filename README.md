@@ -8,6 +8,6 @@
 
 ## To run
 
-git clone and `npm run start` to kick off, or just open on codesandbox
+git clone and `npm run start` to kick off, or just [open on codesandbox](https://codesandbox.io/s/github/chriswebbexternal/auscompanysearch)
 
 run `npm test` for unit tests
