@@ -52,7 +52,6 @@ export type SearchAppState = {
   errorCompany: string | null;
   companyDetail: AbnLookupResult | null;
   companySearchResults: CompanySearchResult[] | null;
-  selectedCompanyAbn: string | null;
 };
 
 /** type to declare the reducer as a lookup by ActionType */

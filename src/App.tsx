@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback } from "react";
 import "./App.css";
 import { useSearchAppReducer, initialState } from "./logic/searchReducer";

@@ -16,8 +16,7 @@ export const initialState = (): SearchAppState => ({
   companySearchResults: null,
   companyDetail: null,
   abnSearchText: "",
-  companySearchText: "",
-  selectedCompanyAbn: null
+  companySearchText: ""
 });
 
 /** The reducer map - this is equivalent to the classic
